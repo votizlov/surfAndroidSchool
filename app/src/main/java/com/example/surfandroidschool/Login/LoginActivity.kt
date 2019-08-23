@@ -1,4 +1,4 @@
-package com.example.surfandroidschool
+package com.example.surfandroidschool.Login
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -23,6 +23,7 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import com.example.surfandroidschool.R
 
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -67,11 +68,16 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             return true
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(email,
+                R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok,
-                    { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
+                    { requestPermissions(arrayOf(READ_CONTACTS),
+                        REQUEST_READ_CONTACTS
+                    ) })
         } else {
-            requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
+            requestPermissions(arrayOf(READ_CONTACTS),
+                REQUEST_READ_CONTACTS
+            )
         }
         return false
     }

@@ -1,5 +1,6 @@
 package com.example.surfandroidschool
 
+import com.example.surfandroidschool.Login.UserAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -10,7 +11,7 @@ public object NetworkService {
         .baseUrl(BASE_URL)
         .build()
 
-    fun createUserAPI():UserAPI{
+    fun createUserAPI(): UserAPI {
         return retrofit.create(UserAPI::class.java)
     }
     fun createMemesAPI():MemesApi{
