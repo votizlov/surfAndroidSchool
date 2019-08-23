@@ -1,8 +1,10 @@
 package com.example.surfandroidschool
 
-import retrofit2.http.GET
+public class NetworkService {
+    private val mInstance = null;
+    private final val BASE_URL = "http://demo3161256.mockable.io/"
 
-public interface NetworkService {
-   // @GET("users/{user}/repos")
-   // Call<List>
+    fun NetworkService getInstance(){
+
+    }
 }
