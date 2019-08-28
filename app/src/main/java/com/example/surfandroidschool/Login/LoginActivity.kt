@@ -34,14 +34,8 @@ import retrofit2.Response
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, Callback<User> {
-    override fun onFailure(call: Call<User>, t: Throwable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
-    override fun onResponse(call: Call<User>, response: Response<User>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -268,8 +262,21 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, Callback<Use
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) :
+    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) :Callback<UserInfo>,
         AsyncTask<Void, Void, Boolean>() {
+        override fun onFailure(call: Call<UserInfo>, t: Throwable) {
+            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            System.out.println("za")
+        }
+
+        override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
+            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            if (response.isSuccessful){
+                System.out.println(response.body()?.id.toString())
+            } else {
+                System.out.println(response.errorBody())
+            }
+        }
 
         override fun doInBackground(vararg params: Void): Boolean? {
             // TODO: attempt authentication against a network service.
@@ -278,7 +285,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, Callback<Use
                 // Simulate network access.
                 //Thread.sleep(2000)
                 val userAPI = NetworkService.createUserAPI()
-                userAPI.search(email.text.toString(),password.text.toString())
+                val call = userAPI.search(email.text.toString(),password.text.toString())
+                call.enqueue(this)
             } catch (e: InterruptedException) {
                 return false
             }

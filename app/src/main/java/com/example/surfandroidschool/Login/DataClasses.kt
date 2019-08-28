@@ -9,7 +9,6 @@ val lastName:	String,
 val userDescription: String)
 data class ErrorResponseDto(
     val code:	String,
-
      val errorMessage:	String
 
 )

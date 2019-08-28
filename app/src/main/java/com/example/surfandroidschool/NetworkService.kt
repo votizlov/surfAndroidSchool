@@ -9,7 +9,6 @@ public object NetworkService {
     private final val BASE_URL = "http://demo3161256.mockable.io/"
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .baseUrl(BASE_URL)
         .build()
 
