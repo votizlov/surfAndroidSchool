@@ -23,14 +23,26 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import com.example.surfandroidschool.NetworkService
 import com.example.surfandroidschool.R
 
 import kotlinx.android.synthetic.main.activity_login.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * A login screen that offers login via email/password.
  */
-class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
+class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor>, Callback<User> {
+    override fun onFailure(call: Call<User>, t: Throwable) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onResponse(call: Call<User>, response: Response<User>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -264,7 +276,9 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000)
+                //Thread.sleep(2000)
+                val userAPI = NetworkService.createUserAPI()
+                userAPI.search(email.text.toString(),password.text.toString())
             } catch (e: InterruptedException) {
                 return false
             }
