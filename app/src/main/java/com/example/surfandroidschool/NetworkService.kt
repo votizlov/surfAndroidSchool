@@ -14,7 +14,7 @@ public object NetworkService {
     fun createUserAPI(): UserAPI {
         return retrofit.create(UserAPI::class.java)
     }
-    fun createMemesAPI():MemesApi{
-        return retrofit.create(MemesApi::class.java)
+    fun createMemesAPI():MemesAPI{
+        return retrofit.create(MemesAPI::class.java)
     }
 }
