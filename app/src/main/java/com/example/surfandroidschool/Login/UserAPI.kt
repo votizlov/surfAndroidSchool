@@ -6,5 +6,5 @@ import retrofit2.http.POST
 
 public interface UserAPI {
     @POST("/auth/login")
-    fun search(@Body user: User): Call<User>
+    fun search(@Body user: User): Call<AuthInfoDto>
 }

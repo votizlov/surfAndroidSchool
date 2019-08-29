@@ -23,6 +23,9 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.content.Context
+import android.content.Intent
+import com.example.surfandroidschool.MemesActivity
 import com.example.surfandroidschool.NetworkService
 import com.example.surfandroidschool.R
 
@@ -150,7 +153,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr, passwordStr)
+            mAuthTask = UserLoginTask(emailStr, passwordStr,this)
             mAuthTask!!.execute(null as Void?)
         }
     }
@@ -262,28 +265,30 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) :Callback<User>,
+    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String, private val context: Context) :Callback<AuthInfoDto>,
         AsyncTask<Void, Void, Boolean>() {
-        override fun onFailure(call: Call<User>, t: Throwable) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        override fun onFailure(call: Call<AuthInfoDto>, t: Throwable) {
             System.out.println(t.message)
         }
 
-        override fun onResponse(call: Call<User>, response: Response<User>) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        override fun onResponse(call: Call<AuthInfoDto>, response: Response<AuthInfoDto>) {
             if (response.isSuccessful){
-                System.out.println(response.body()?.pass)
+                val editor = getSharedPreferences("APP_PREFERENCES",Context.MODE_PRIVATE).edit()
+                editor.putString("APP_PREFERENCES_TOKEN",response.body()?.accessToken)
+                editor.putInt("APP_PREFERENCES_ID", response.body()?.userInfo?.id!!)
+                editor.putString("APP_PREFERENCES_USERNAME",response.body()?.userInfo?.username)
+                editor.putString("APP_PREFERENCES_LAST_NAME",response.body()?.userInfo?.lastName)
+                editor.putString("APP_PREFERENCES_FIRST_NAME",response.body()?.userInfo?.firstName)
+                editor.putString("APP_PREFERENCES_USER_DESCRIPTION",response.body()?.userInfo?.userDescription)
+                editor.apply()
             } else {
                 System.out.println(response.errorBody())
             }
         }
 
         override fun doInBackground(vararg params: Void): Boolean? {
-            // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                //Thread.sleep(2000)
                 val userAPI = NetworkService.createUserAPI()
                 val call = userAPI.search(User(mEmail,mPassword))
                 call.enqueue(this)
@@ -291,7 +296,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 return false
             }
 
-            return null
+            return true
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -299,6 +304,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
+                startActivity(Intent(context, MemesActivity::class.java))
                 finish()
             } else {
                 password.error = getString(R.string.error_incorrect_password)

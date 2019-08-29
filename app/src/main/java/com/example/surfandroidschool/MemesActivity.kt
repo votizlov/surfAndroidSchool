@@ -31,4 +31,8 @@ class MemesActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+
+    fun loadMemes(){
+
+    }
 }
