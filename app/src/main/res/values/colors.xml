@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="active_elem_color">#23213F</color>
     <color name="nav_color">#312F51</color>
+    <color name="main_color">#23213F</color>
     <drawable name="main_color">#23213F</drawable>
     <drawable name="active_element_color">#1EF0D7</drawable>
 </resources>
