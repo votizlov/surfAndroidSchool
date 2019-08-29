@@ -262,17 +262,17 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) :Callback<UserInfo>,
+    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) :Callback<User>,
         AsyncTask<Void, Void, Boolean>() {
-        override fun onFailure(call: Call<UserInfo>, t: Throwable) {
+        override fun onFailure(call: Call<User>, t: Throwable) {
             //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            System.out.println("za")
+            System.out.println(t.message)
         }
 
-        override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
+        override fun onResponse(call: Call<User>, response: Response<User>) {
             //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             if (response.isSuccessful){
-                System.out.println(response.body()?.id.toString())
+                System.out.println(response.body()?.pass)
             } else {
                 System.out.println(response.errorBody())
             }
@@ -285,20 +285,13 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 // Simulate network access.
                 //Thread.sleep(2000)
                 val userAPI = NetworkService.createUserAPI()
-                val call = userAPI.search(email.text.toString(),password.text.toString())
+                val call = userAPI.search(User(mEmail,mPassword))
                 call.enqueue(this)
             } catch (e: InterruptedException) {
                 return false
             }
 
-            return DUMMY_CREDENTIALS
-                .map { it.split(":") }
-                .firstOrNull { it[0] == mEmail }
-                ?.let {
-                    // Account exists, return true if the password matches.
-                    it[1] == mPassword
-                }
-                ?: true
+            return null
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -326,10 +319,5 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
          */
         private val REQUEST_READ_CONTACTS = 0
 
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }
